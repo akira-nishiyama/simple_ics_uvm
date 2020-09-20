@@ -9,10 +9,12 @@
 class tb_simple_ics_uvm_env extends uvm_env;
     `uvm_component_utils(tb_simple_ics_uvm_env)
     `uvm_new_func
-    simple_uart_agent agent;
+    simple_uart_agent uart_agent;
+    simple_ics_env ics_env;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
-        agent = simple_uart_agent::type_id::create("agent",this);
+        uart_agent = simple_uart_agent::type_id::create("uart_agent",this);
+        ics_env  = simple_ics_env::type_id::create("ics_env",this);
     endfunction
 endclass
 

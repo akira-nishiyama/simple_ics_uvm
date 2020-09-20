@@ -14,6 +14,8 @@ module tb_simple_ics_uvm;
     
     logic clk, rstz;
     simple_uart_if sif();// interface
+    simple_uart_if sif2();// interface
+    logic ics_sig_from_dut;
     initial begin
         fork
             begin
@@ -28,10 +30,29 @@ module tb_simple_ics_uvm;
             end
         join
     end
-    assign sif.posi = sif.piso;
+
     initial begin
-        set_global_timeout(10000000ns);
-        uvm_config_db#(virtual simple_uart_if)::set(uvm_root::get(), "*", "vif", sif);
+        ics_sig_from_dut <= 1;
+        forever begin
+            #50;
+            ics_sig_from_dut <= 1'b1;
+            #50;
+            ics_sig_from_dut <= 1'bz;
+            #50;
+            ics_sig_from_dut <= 1'b0;
+        end
+    end
+
+    //assign sif.posi = ics_sig_from_dut;
+    //pullup(ics_sig_from_dut);
+    //assign ics_sig_from_dut = (sif.piso === 1'b0) ? 0 : ics_sig_from_dut;
+    assign sif.posi = sif2.piso;
+    assign sif2.posi = sif.piso;
+
+    initial begin
+        set_global_timeout(100000000ns);
+        uvm_config_db#(virtual simple_uart_if)::set(uvm_root::get(), "uvm_test_top.tb_simple_ics_uvm_env.uart_agent*", "vif", sif);
+        uvm_config_db#(virtual simple_uart_if)::set(uvm_root::get(), "uvm_test_top.tb_simple_ics_uvm_env.ics_env.agent*", "vif", sif2);
         run_test("simple_ics_uvm_test_example");
     end
 
