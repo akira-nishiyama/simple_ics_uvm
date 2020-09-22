@@ -21,6 +21,21 @@ class simple_ics_seq_item extends uvm_sequence_item;
     rand logic[13:0] data;
     rand logic[7:0] eeprom_data[];
 
+    //if cmd is not equals to ID_R or ID, id_sub_cmd is fixed to ID_READ.
+    constraint c_id_subcommand { !((cmd == ID) || (cmd == ID_R)) -> id_sub_cmd == ID_READ;}
+    //if cmd equals to POSITION_R or POSITION, sub_cmd is fixed to EEPROM.
+    constraint c_sub_cmd { (cmd == POSITION_R || cmd == POSITION) -> sub_cmd == EEPROM;}
+    //if cmd equals to WRITE or WRITE_R, sub_cmd is not TCH.
+    constraint c_sub_cmd2 { (cmd == WRITE || cmd == WRITE_R) -> sub_cmd != TCH;}
+    //if cmd equals to READ or READ_R and sub_cmd equals EEPROM, data should be zero.
+    constraint c_data { ((cmd == READ || cmd == READ_R) && sub_cmd == EEPROM) -> data == 0;}
+    //if cmd equals to WRITE or WRITE_R and sub_cmd equals to EEPROM, data should be zero.
+    constraint c_data2 { ((cmd == WRITE || cmd == WRITE_R) && sub_cmd == EEPROM) -> data == 0;}
+    //if cmd equals to READ_R and sub_cmd equals to EEPROM or TCH, data should be less than 256
+    constraint c_data3 { (cmd == READ_R && (sub_cmd == EEPROM || sub_cmd == TCH)) -> data < 256;}
+    //if cmd equals to WRITE or WRITE_R and sub_cmd not equals to EEPROM, data should be less than 256
+    constraint c_data4 { ((cmd == WRITE || cmd == WRITE_R) && sub_cmd != EEPROM) -> data < 256;}
+
     `uvm_object_utils_begin(simple_ics_seq_item)
         `uvm_field_enum (ics_command, cmd, UVM_DEFAULT)
         `uvm_field_int (id, UVM_DEFAULT | UVM_HEX)

@@ -46,13 +46,13 @@ module tb_simple_ics_uvm;
     //assign sif.posi = ics_sig_from_dut;
     //pullup(ics_sig_from_dut);
     //assign ics_sig_from_dut = (sif.piso === 1'b0) ? 0 : ics_sig_from_dut;
-    assign sif.posi = sif2.piso;
-    assign sif2.posi = sif.piso;
+    assign sif.posi = sif.piso;
+    //assign sif2.posi = sif.piso;
 
     initial begin
         set_global_timeout(100000000ns);
-        uvm_config_db#(virtual simple_uart_if)::set(uvm_root::get(), "uvm_test_top.tb_simple_ics_uvm_env.uart_agent*", "vif", sif);
-        uvm_config_db#(virtual simple_uart_if)::set(uvm_root::get(), "uvm_test_top.tb_simple_ics_uvm_env.ics_env.agent*", "vif", sif2);
+        //uvm_config_db#(virtual simple_uart_if)::set(uvm_root::get(), "uvm_test_top.tb_simple_ics_uvm_env.uart_agent*", "vif", sif);
+        uvm_config_db#(virtual simple_uart_if)::set(uvm_root::get(), "uvm_test_top.tb_simple_ics_uvm_env.ics_env.agent*", "vif", sif);
         run_test("simple_ics_uvm_test_example");
     end
 

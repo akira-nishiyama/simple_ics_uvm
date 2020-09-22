@@ -13,6 +13,7 @@ package simple_ics_uvm_pkg;
     import simple_uart_uvm_pkg::*;
     `include "simple_ics_seq_item.svh"
     `include "ics_item_to_uart_item_seq.svh"
+    `include "uart_item_to_ics_item_monitor.svh"
 //    `include "simple_ics_driver.svh"
 //    `include "simple_ics_monitor.svh"
 //    `include "simple_ics_slave_agent.svh"

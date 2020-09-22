@@ -56,8 +56,9 @@ class issue_one_trans_ics_seq extends simple_uart_base_sequence;
     `uvm_create(trans_item)
     start_item(trans_item);
     assert(trans_item.randomize());
-    trans_item.cmd=simple_ics_seq_item::READ_R;
-    trans_item.sub_cmd=simple_ics_seq_item::EEPROM;
+    trans_item.cmd = simple_ics_seq_item::READ_R;
+    trans_item.sub_cmd = simple_ics_seq_item::EEPROM;
+    trans_item.data = 0;
     trans_item.eeprom_data = new[64];
     foreach(config_data[i]) begin
         trans_item.eeprom_data[i] = config_data[i];
@@ -66,27 +67,17 @@ class issue_one_trans_ics_seq extends simple_uart_base_sequence;
 
     trans_item.print();
     //write
-    `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::WRITE;})
+    `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::WRITE;sub_cmd==simple_ics_seq_item::CUR;})
     trans_item.print();
-    `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::WRITE_R;sub_cmd==simple_ics_seq_item::TCH;})
+    `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::WRITE_R;sub_cmd==simple_ics_seq_item::CUR;})
     trans_item.print();
     //write eeprom
-//    config_data2 = { 8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,
-//                     8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,
-//                     8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,
-//                     8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,
-//                     8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,
-//                     8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,
-//                     8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,
-//                     8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00};
-//    foreach(config_data2[i]) $display("config_dat2a[%d]=%h",i,config_data2[i]);
-//    `uvm_do_with(trans_item2,{  trans_item2.cmd==simple_ics_seq_item::WRITE;trans_item.sub_cmd==simple_ics_seq_item::EEPROM; \
-//                                foreach(config_data2[i]) { trans_item2.eeprom_data[i] == config_data2[i];} trans_item2.eeprom_data.size==64; })
     `uvm_create(trans_item)
     start_item(trans_item);
     assert(trans_item.randomize());
-    trans_item.cmd=simple_ics_seq_item::WRITE;
-    trans_item.sub_cmd=simple_ics_seq_item::EEPROM;
+    trans_item.cmd = simple_ics_seq_item::WRITE;
+    trans_item.sub_cmd= simple_ics_seq_item::EEPROM;
+    trans_item.data = 0;
     trans_item.eeprom_data = new[64];
     foreach(config_data[i]) begin
         trans_item.eeprom_data[i] = config_data[i];
@@ -97,15 +88,15 @@ class issue_one_trans_ics_seq extends simple_uart_base_sequence;
     `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::WRITE_R;sub_cmd==simple_ics_seq_item::EEPROM;})
     trans_item.print();
     //id read
-    `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::ID; id_sub_cmd==simple_ics_seq_item::ID_READ;})
-    trans_item.print();
-    `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::ID_R;})
-    trans_item.print();
+//    `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::ID; id_sub_cmd==simple_ics_seq_item::ID_READ;})
+//    trans_item.print();
+//    `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::ID_R;})
+//    trans_item.print();
     //id write
-    `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::ID; id_sub_cmd==simple_ics_seq_item::ID_WRITE;})
-    trans_item.print();
-    `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::ID_R;})
-    trans_item.print();
+//    `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::ID; id_sub_cmd==simple_ics_seq_item::ID_WRITE;})
+//    trans_item.print();
+//    `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::ID_R;})
+//    trans_item.print();
     #1000;
   endtask
 endclass

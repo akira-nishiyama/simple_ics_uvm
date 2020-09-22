@@ -12,12 +12,19 @@ class simple_ics_env extends uvm_env;
     `uvm_component_utils(simple_ics_env)
     `uvm_new_func
     simple_uart_agent agent;
+    uart_item_to_ics_item_monitor monitor;
     uvm_sequencer#(simple_ics_seq_item) sequencer;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         agent = simple_uart_agent::type_id::create("agent",this);
+        monitor = uart_item_to_ics_item_monitor::type_id::create("monitor",this);
         sequencer = uvm_sequencer#(simple_ics_seq_item)::type_id::create("sequencer",this);
     endfunction
+
+    function void connect_phase(uvm_phase phase);
+        agent.monitor.item_port.connect(monitor.analysis_export);
+    endfunction
+
     task run_phase(uvm_phase phase);
         ics_item_to_uart_item_seq ics2uart_seq;
         ics2uart_seq = ics_item_to_uart_item_seq::type_id::create("ics2uart_seq",this);
