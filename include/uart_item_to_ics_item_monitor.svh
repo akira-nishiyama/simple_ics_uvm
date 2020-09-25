@@ -13,7 +13,6 @@ class uart_item_to_ics_item_monitor extends uvm_subscriber #(simple_uart_seq_ite
     simple_ics_seq_item mon_item;
     logic[7:0] data[$];
 
-    // declarations omitted ...  
     function new(string name, uvm_component parent);
         super.new(name, parent);
         item_port = new("item_port",this);
@@ -25,7 +24,7 @@ class uart_item_to_ics_item_monitor extends uvm_subscriber #(simple_uart_seq_ite
         
         //foreach(data[i]) $display("data[%02x]:%x",i,data[i]);
         if(data.size > 0) begin
-            uvm_report_info("MON",$sformatf("data[0]:%x",data[0]));
+//            uvm_report_info("MON",$sformatf("data[0]:%x",data[0]));
             case(data[0][7:5])
                 simple_ics_seq_item::POSITION_R: begin
                         if(data.size === 3) begin
@@ -61,6 +60,7 @@ class uart_item_to_ics_item_monitor extends uvm_subscriber #(simple_uart_seq_ite
                                     //subcmd
                                     d = data.pop_front();
                                     mon_item.sub_cmd = simple_ics_seq_item::EEPROM;
+                                    mon_item.data = 0;
                                     //eeprom data
                                     mon_item.eeprom_data = new[64];
                                     for(int i = 0; i < 64; ++i) begin
@@ -134,6 +134,7 @@ class uart_item_to_ics_item_monitor extends uvm_subscriber #(simple_uart_seq_ite
                                     //subcmd
                                     d = data.pop_front();
                                     mon_item.sub_cmd = simple_ics_seq_item::EEPROM;
+                                    mon_item.data = 0;
                                     //output item
                                     item_port.write(mon_item);
                                     uvm_report_info("MON","write_r,subcmd eeprom detect");
@@ -218,6 +219,7 @@ class uart_item_to_ics_item_monitor extends uvm_subscriber #(simple_uart_seq_ite
                                 8'h4: mon_item.sub_cmd = simple_ics_seq_item::TMP;
                                 8'h5: mon_item.sub_cmd = simple_ics_seq_item::TCH;
                             endcase
+                            mon_item.data = 0;
                             //output item
                             item_port.write(mon_item);
                             uvm_report_info("MON","read detect");
@@ -236,6 +238,7 @@ class uart_item_to_ics_item_monitor extends uvm_subscriber #(simple_uart_seq_ite
                                     //subcmd
                                     d = data.pop_front();
                                     mon_item.sub_cmd = simple_ics_seq_item::EEPROM;
+                                    mon_item.data = 0;
                                     //eeprom data
                                     mon_item.eeprom_data = new[64];
                                     for(int i = 0; i < 64; ++i) begin

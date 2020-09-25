@@ -26,6 +26,10 @@ require(simple_uart_uvm
        )
 #        GIT_TAG 66724fade682974cc9c01933941fedea23d973f6)
 
+require(gp_scoreboard
+        GIT_REPOSITORY https://github.com/akira-nishiyama/uvm_component.git
+       )
+
 #source list
 #list(APPEND SRC_FILES "")
 #string(REPLACE ";" ":" SRC_FILES_FOR_PRJ "${SRC_FILES}")
@@ -35,7 +39,7 @@ string(REPLACE ";" ":" SRC_FILES_FOR_PRJ " ")
 file(GLOB UVM_AXI_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.sv
                         ${CMAKE_CURRENT_SOURCE_DIR}/example/*.sv)
 #set(TESTBENCH_FILES "")
-list(APPEND TESTBENCH_FILES "${UVM_AXI_FILES};${simple_uart_uvm_TESTBENCH_FILES}")
+list(APPEND TESTBENCH_FILES "${UVM_AXI_FILES};${simple_uart_uvm_TESTBENCH_FILES};${gp_scoreboard_TESTBENCH_FILES}")
 string(REPLACE ";" ":" TESTBENCH_FILES_FOR_PRJ "${TESTBENCH_FILES}")
 
 #message("${TESTBENCH_FILES}")
@@ -70,7 +74,7 @@ add_custom_target(sim_all DEPENDS elaborate_all)
 list(APPEND INCLUDE_DIRS "-i ${CMAKE_CURRENT_SOURCE_DIR}/include")
 list(APPEND INCLUDE_DIRS_EXAMPLE "-i ${CMAKE_CURRENT_SOURCE_DIR}/example")
 
-set(ADDITIONAL_VLOG_OPTS "-L uvm -d VIVADO_SIM ${INCLUDE_DIRS} ${INCLUDE_DIRS_EXAMPLE} ${simple_uart_uvm_DEFINITIONS_VLOG}")
+set(ADDITIONAL_VLOG_OPTS "-L uvm -d VIVADO_SIM ${INCLUDE_DIRS} ${INCLUDE_DIRS_EXAMPLE} ${simple_uart_uvm_DEFINITIONS_VLOG} ${gp_scoreboard_DEFINITIONS_VLOG}")
 set(ADDITIONAL_ELAB_OPTS "-L uvm")
 set(ADDITIONAL_XSIM_OPTS "-testplusarg UVM_TESTNAME")
 

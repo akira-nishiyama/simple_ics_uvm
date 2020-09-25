@@ -9,6 +9,7 @@
 package tb_simple_ics_uvm_test_pkg;
     `include "uvm_macros.svh"
     import uvm_pkg::*;
+    `include "gp_scoreboard.sv"
     import simple_uart_uvm_pkg::*;
     import simple_ics_uvm_pkg::*;
     `include "tb_simple_ics_uvm_env.svh"
