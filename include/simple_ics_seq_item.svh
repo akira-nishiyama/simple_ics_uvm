@@ -28,7 +28,7 @@ class simple_ics_seq_item extends uvm_sequence_item;
     //if cmd equals to WRITE or WRITE_R, sub_cmd is not TCH.
     constraint c_sub_cmd2 { (cmd == WRITE || cmd == WRITE_R) -> sub_cmd != TCH;}
     //if cmd equals to READ or READ_R and sub_cmd equals EEPROM, data should be zero.
-    constraint c_data { ((cmd == READ || cmd == READ_R) && sub_cmd == EEPROM) -> data == 0;}
+    constraint c_data { (cmd == READ || (cmd == READ_R && sub_cmd == EEPROM)) -> data == 0;}
     //if cmd equals to WRITE or WRITE_R and sub_cmd equals to EEPROM, data should be zero.
     constraint c_data2 { ((cmd == WRITE || cmd == WRITE_R) && sub_cmd == EEPROM) -> data == 0;}
     //if cmd equals to READ_R and sub_cmd equals to EEPROM or TCH, data should be less than 256
