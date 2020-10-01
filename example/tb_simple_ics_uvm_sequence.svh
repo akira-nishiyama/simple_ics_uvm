@@ -22,6 +22,7 @@ endclass
 
 class issue_one_trans_ics_seq extends simple_uart_base_sequence;
     `uvm_object_utils(issue_one_trans_ics_seq)
+    uvm_analysis_port#(simple_ics_seq_item) item_port;
     function new(string name="issue_one_trans_ics_seq");
         super.new(name);
     endfunction
@@ -30,17 +31,24 @@ class issue_one_trans_ics_seq extends simple_uart_base_sequence;
         //simple_uart_seq_item trans_item;
         simple_ics_seq_item trans_item;
         simple_ics_seq_item trans_item2;
+        if(!uvm_config_db #(uvm_analysis_port#(simple_ics_seq_item))::get(get_sequencer(),"", "scrbd_item_port", item_port)) begin
+            uvm_report_fatal("CONFIG_DB_ERROR", "Could not find scrbd_item_port.");
+        end
         //position
         `uvm_create(trans_item)
         `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::POSITION;})
         trans_item.print();
+        item_port.write(trans_item);
         `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::POSITION_R;})
         trans_item.print();
+        item_port.write(trans_item);
         //read
         `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::READ;})
         trans_item.print();
+        item_port.write(trans_item);
         `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::READ_R;sub_cmd==simple_ics_seq_item::TCH;})
         trans_item.print();
+        item_port.write(trans_item);
         //read eeprom reply
         config_data = { 8'h00,8'h00,8'h01,8'h00,8'h00,8'h00,8'h00,8'h00,
                         8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,
@@ -60,14 +68,17 @@ class issue_one_trans_ics_seq extends simple_uart_base_sequence;
         foreach(config_data[i]) begin
             trans_item.eeprom_data[i] = config_data[i];
         end
+        item_port.write(trans_item);
         finish_item(trans_item);
 
         trans_item.print();
         //write
         `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::WRITE;sub_cmd==simple_ics_seq_item::CUR;})
         trans_item.print();
+        item_port.write(trans_item);
         `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::WRITE_R;sub_cmd==simple_ics_seq_item::CUR;})
         trans_item.print();
+        item_port.write(trans_item);
         //write eeprom
         `uvm_create(trans_item)
         start_item(trans_item);
@@ -79,12 +90,14 @@ class issue_one_trans_ics_seq extends simple_uart_base_sequence;
         foreach(config_data[i]) begin
             trans_item.eeprom_data[i] = config_data[i];
         end
+        item_port.write(trans_item);
         finish_item(trans_item);
 
         trans_item.print();
         `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::WRITE_R;sub_cmd==simple_ics_seq_item::EEPROM;})
         trans_item.print();
-        #1000;
+        item_port.write(trans_item);
+        #2000000;
     endtask
 endclass
 

@@ -13,25 +13,14 @@ class ics_item_to_uart_item_seq extends uvm_sequence #(simple_uart_seq_item);
     endfunction
 
     uvm_sequencer #(simple_ics_seq_item) up_sequencer;
-    uvm_analysis_port#(simple_ics_seq_item) item_port;
 
     virtual task body();
         simple_ics_seq_item ics_item;
         simple_uart_seq_item uart_item;
         logic[4:0] id;
         bit enable_item_port = 0;
-        //get item_port
-        if(!uvm_config_db #(uvm_analysis_port#(simple_ics_seq_item))::get(get_sequencer(),"", "scrbd_item_port", item_port)) begin
-            enable_item_port = 0;
-            uvm_report_info("CONFIG","Could not find scrbd_item_port. Sequence item export function is disabled.");
-            //`uvm_error("CONFIG_DB_ERROR", "Could not find config")
-        end else begin
-            uvm_report_info("CONFIG","scrbd_item_port found. Sequence item export function is enabled.");
-            enable_item_port = 1;
-        end
         forever begin
             up_sequencer.get_next_item(ics_item);
-            if(enable_item_port) item_port.write(ics_item);
             uart_item = simple_uart_seq_item::type_id::create("test");
             id = ics_item.id;
             `uvm_create(uart_item)
@@ -106,12 +95,6 @@ class ics_item_to_uart_item_seq extends uvm_sequence #(simple_uart_seq_item);
                         end
                     end
             endcase
-//            if(ics_item.cmd === simple_ics_seq_item::POSITION) begin
-//                `uvm_do_with(uart_item, {char==8'h80;})
-//            end
-            //start_item(uart_item);
-            //finish_item(uart_item);
-
             up_sequencer.item_done();
         end
     endtask
