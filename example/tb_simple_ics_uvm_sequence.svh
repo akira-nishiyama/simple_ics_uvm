@@ -88,3 +88,86 @@ class issue_one_trans_ics_seq extends simple_uart_base_sequence;
     endtask
 endclass
 
+class issue_seq_for_ics_slave_test extends simple_uart_base_sequence;
+    `uvm_object_utils(issue_seq_for_ics_slave_test)
+    uvm_analysis_port#(simple_ics_seq_item) item_port;
+    function new(string name="issue_one_trans_ics_seq");
+        super.new(name);
+    endfunction
+    virtual task body();
+        logic[7:0] config_data[];
+        //simple_uart_seq_item trans_item;
+        simple_ics_seq_item trans_item;
+        simple_ics_seq_item trans_item2;
+        if(!uvm_config_db #(uvm_analysis_port#(simple_ics_seq_item))::get(get_sequencer(),"", "slave_test_item_port", item_port)) begin
+            uvm_report_fatal("CONFIG_DB_ERROR", "Could not find slave_test_item_port.");
+        end
+        #5000000;
+        //position
+        `uvm_create(trans_item)
+        `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::POSITION;})
+        trans_item.print();
+        //reply
+        trans_item.cmd = simple_ics_seq_item::POSITION_R;
+        item_port.write(trans_item);
+        #10000000;
+        //read
+        `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::READ;sub_cmd==simple_ics_seq_item::TCH;})
+        trans_item.print();
+        trans_item.cmd = simple_ics_seq_item::READ_R;
+        trans_item.data = 0;
+        item_port.write(trans_item);
+        #10000000;
+        `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::READ;sub_cmd==simple_ics_seq_item::EEPROM;})
+        trans_item.print();
+        //reply
+        trans_item.cmd = simple_ics_seq_item::READ_R;
+        trans_item.data = 0;
+        config_data = { 8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,
+                        8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,
+                        8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,
+                        8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,
+                        8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,
+                        8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,
+                        8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,
+                        8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00,8'h00};
+        trans_item.eeprom_data = config_data;
+        item_port.write(trans_item);
+        #10000000;
+        //write
+        `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::WRITE;sub_cmd==simple_ics_seq_item::CUR;})
+        trans_item.print();
+        //reply
+        trans_item.cmd = simple_ics_seq_item::WRITE_R;
+        item_port.write(trans_item);
+        #10000000;
+        //write eeprom
+        `uvm_create(trans_item)
+        start_item(trans_item);
+        assert(trans_item.randomize());
+        trans_item.cmd = simple_ics_seq_item::WRITE;
+        trans_item.sub_cmd= simple_ics_seq_item::EEPROM;
+        trans_item.id = 1;
+        trans_item.data = 0;
+        config_data[1] = 8'h1;
+        trans_item.eeprom_data = config_data;
+        finish_item(trans_item);
+
+        trans_item.print();
+        //reply
+        trans_item.cmd = simple_ics_seq_item::WRITE_R;
+        trans_item.eeprom_data = {};
+        item_port.write(trans_item);
+        #10000000;
+        //readback eeprom
+        `uvm_do_with(trans_item,{cmd==simple_ics_seq_item::READ;id==1;sub_cmd==simple_ics_seq_item::EEPROM;})
+        trans_item.print();
+        //reply
+        trans_item.cmd = simple_ics_seq_item::READ_R;
+        trans_item.eeprom_data = config_data;
+        item_port.write(trans_item);
+        #10000000;
+    endtask
+endclass
+
+

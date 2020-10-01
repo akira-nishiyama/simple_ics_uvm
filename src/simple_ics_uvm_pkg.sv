@@ -18,6 +18,9 @@ package simple_ics_uvm_pkg;
 //    `include "simple_ics_monitor.svh"
 //    `include "simple_ics_slave_agent.svh"
     `include "simple_ics_env.svh"
+    `include "simple_ics_slave_storage.svh"
+    `include "ics_reactive_seq.svh"
+    `include "simple_ics_slave_env.svh"
 //    `include "simple_ics_base_sequence.svh"
 endpackage
 

@@ -15,5 +15,7 @@ package tb_simple_ics_uvm_test_pkg;
     `include "tb_simple_ics_uvm_env.svh"
     `include "tb_simple_ics_uvm_sequence.svh"
     `include "tb_simple_ics_uvm_test.svh"
+    `include "tb_simple_ics_uvm_slave_env.svh"
+    `include "tb_simple_ics_uvm_slave_test.svh"
 
 endpackage

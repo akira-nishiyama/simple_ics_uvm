@@ -21,7 +21,7 @@ class ics_item_to_uart_item_seq extends uvm_sequence #(simple_uart_seq_item);
         logic[4:0] id;
         bit enable_item_port = 0;
         //get item_port
-        if(!uvm_config_db #(uvm_analysis_port#(simple_ics_seq_item))::get(null,"", "scrbd_item_port", item_port)) begin
+        if(!uvm_config_db #(uvm_analysis_port#(simple_ics_seq_item))::get(get_sequencer(),"", "scrbd_item_port", item_port)) begin
             enable_item_port = 0;
             uvm_report_info("CONFIG","Could not find scrbd_item_port. Sequence item export function is disabled.");
             //`uvm_error("CONFIG_DB_ERROR", "Could not find config")

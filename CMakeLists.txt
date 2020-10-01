@@ -84,6 +84,7 @@ file(GLOB EXAMPLE_DEPENDENCIES  ${CMAKE_CURRENT_SOURCE_DIR}/include/*.svh
                                 ${CMAKE_CURRENT_SOURCE_DIR}/example/*.svh)
 
 add_sim(tb_simple_ics_uvm ${SIMULATION_DIR} "${DEPENDENCIES};${EXAMPLE_DEPENDENCIES}" "${ADDITIONAL_VLOG_OPTS}" "${ADDITIONAL_ELAB_OPTS}" "${ADDITIONAL_XSIM_OPTS}" "")
+add_sim(tb_simple_ics_uvm_slave ${SIMULATION_DIR} "${DEPENDENCIES};${EXAMPLE_DEPENDENCIES}" "${ADDITIONAL_VLOG_OPTS}" "${ADDITIONAL_ELAB_OPTS}" "${ADDITIONAL_XSIM_OPTS}" "")
 
 if(PRINT_VARIABLES)
     message(STATUS "*** dump start cmake variables ***")

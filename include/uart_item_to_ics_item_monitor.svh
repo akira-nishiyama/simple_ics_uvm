@@ -10,12 +10,15 @@ class uart_item_to_ics_item_monitor extends uvm_subscriber #(simple_uart_seq_ite
     // provides an analysis export of type C_item 
     `uvm_component_utils(uart_item_to_ics_item_monitor)
     uvm_analysis_port#(simple_ics_seq_item) item_port;
+    uvm_analysis_port#(simple_ics_seq_item) react_req_port;
     simple_ics_seq_item mon_item;
+    simple_ics_seq_item react_item;
     logic[7:0] data[$];
 
     function new(string name, uvm_component parent);
         super.new(name, parent);
         item_port = new("item_port",this);
+        react_req_port = new("react_req_port",this);
     endfunction
 
     function void write(simple_uart_seq_item t);
@@ -199,6 +202,13 @@ class uart_item_to_ics_item_monitor extends uvm_subscriber #(simple_uart_seq_ite
                             mon_item.data = tch;
                             item_port.write(mon_item);
                             uvm_report_info("MON","position detect");
+                            //react req
+                            react_req_port.write(mon_item);
+//                            react_item = new();
+//                            react_item.cmd = simple_ics_seq_item::POSITION_R;
+//                            react_item.id = mon_item.id;
+//                            react_item.data = mon_item.data;
+//                            react_req_port.write(react_item);
                         end
                     end
                 simple_ics_seq_item::READ: begin
@@ -223,6 +233,14 @@ class uart_item_to_ics_item_monitor extends uvm_subscriber #(simple_uart_seq_ite
                             //output item
                             item_port.write(mon_item);
                             uvm_report_info("MON","read detect");
+                            //react req
+                            react_req_port.write(mon_item);
+//                            react_item = new();
+//                            react_item.cmd = simple_ics_seq_item::READ_R;
+//                            react_item.id = mon_item.id;
+//                            react_item.sub_cmd = mon_item.sub_cmd;
+//                            react_item.data = 0;
+//                            react_req_port.write(react_item);
                         end
                     end
                 simple_ics_seq_item::WRITE: begin
@@ -247,6 +265,14 @@ class uart_item_to_ics_item_monitor extends uvm_subscriber #(simple_uart_seq_ite
                                     //output item
                                     item_port.write(mon_item);
                                     uvm_report_info("MON","write, subcmd eeprom detect");
+                                    //react req
+                                    react_req_port.write(mon_item);
+//                                    react_item = new();
+//                                    react_item.cmd = simple_ics_seq_item::WRITE_R;
+//                                    react_item.id = mon_item.id;
+//                                    react_item.sub_cmd = mon_item.sub_cmd;
+//                                    react_item.data = 0;
+//                                    react_req_port.write(react_item);
                                 end
                             end else begin
                                 if(data.size === 3) begin
@@ -272,6 +298,14 @@ class uart_item_to_ics_item_monitor extends uvm_subscriber #(simple_uart_seq_ite
                                     //output item
                                     item_port.write(mon_item);
                                     uvm_report_info("MON","write, subcmd data detect");
+                                    //react req
+                                    react_req_port.write(mon_item);
+//                                    react_item = new();
+//                                    react_item.cmd = simple_ics_seq_item::WRITE_R;
+//                                    react_item.id = mon_item.id;
+//                                    react_item.sub_cmd = mon_item.sub_cmd;
+//                                    react_item.data = mon_item.data;
+//                                    react_req_port.write(react_item);
                                 end
                             end
                         end
