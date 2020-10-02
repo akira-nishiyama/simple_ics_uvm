@@ -39,7 +39,7 @@ string(REPLACE ";" ":" SRC_FILES_FOR_PRJ " ")
 file(GLOB UVM_AXI_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.sv
                         ${CMAKE_CURRENT_SOURCE_DIR}/example/*.sv)
 #set(TESTBENCH_FILES "")
-list(APPEND TESTBENCH_FILES "${UVM_AXI_FILES};${simple_uart_uvm_TESTBENCH_FILES};${gp_scoreboard_TESTBENCH_FILES}")
+list(APPEND TESTBENCH_FILES "${UVM_AXI_FILES};${simple_uart_uvm_SIM_FILES};${gp_scoreboard_SIM_FILES}")
 string(REPLACE ";" ":" TESTBENCH_FILES_FOR_PRJ "${TESTBENCH_FILES}")
 
 #message("${TESTBENCH_FILES}")
