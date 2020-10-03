@@ -7,11 +7,12 @@
 #  simple_ics_uvm_DEPENDENCIES      - simple_ics_uvm components list. use for target depends.
 
 # Compute paths
-find_package(simple_uart_uvm REQUIRED)
 if(CMAKE_VERSION VERSION_GREATER 3.10)
     if (NOT ${PACKAGE_NAME}_FOUND)
         require(simple_uart_uvm)
     endif()
+else()
+    find_package(simple_uart_uvm REQUIRED)
 endif()
 set(simple_ics_uvm_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/include")
 set(simple_ics_uvm_SRC_FILES "") #empty. this package is for simulation only.
