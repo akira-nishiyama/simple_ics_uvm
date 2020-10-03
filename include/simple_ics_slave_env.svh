@@ -1,7 +1,7 @@
 // simple_ics_slave_env.svh
 //      This file implements the simple_ics_uvm slave environment for simple_ics_uvm_pkg.
 //      This environment has simple_ics_env and the slave wrapper.
-//      
+//
 // Copyright (c) 2020 Akira Nishiyama.
 // Released under the MIT license
 // https://opensource.org/licenses/mit-license.php
@@ -31,8 +31,6 @@ class simple_ics_slave_env extends uvm_env;
     task run_phase(uvm_phase phase);
         ics_reactive_seq reactive_seq;
         reactive_seq = ics_reactive_seq::type_id::create("reactive_seq",this);
-        //reactive_seq.up_sequencer = sequencer;
         reactive_seq.start(ics_env.sequencer);
     endtask
 endclass
-
