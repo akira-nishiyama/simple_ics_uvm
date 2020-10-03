@@ -9,7 +9,9 @@
 # Compute paths
 if(CMAKE_VERSION VERSION_GREATER 3.10)
     if (NOT ${PACKAGE_NAME}_FOUND)
-        require(simple_uart_uvm)
+        require(simple_uart_uvm
+                GIT_REPOSITORY https://github.com/akira-nishiyama/simple_urat_uvm.git
+                )
     endif()
 else()
     find_package(simple_uart_uvm REQUIRED)
