@@ -17,6 +17,7 @@ class ics_reactive_seq extends uvm_sequence #(simple_ics_seq_item);
     int baud_rate;
     int bit_period;
     int stop_bit_num;
+    bit parity_enable;
 
     function new(string name="ics_reactive_seq");
         super.new(name);
@@ -41,7 +42,7 @@ class ics_reactive_seq extends uvm_sequence #(simple_ics_seq_item);
             default: `uvm_fatal("CONFIG_ERR","Undefined baud rate.")
         endcase
         //parity enable flag
-        if(!uvm_config_db#(bit)::get(this, "", "simple_uart_parity_enable", parity_enable)) begin
+        if(!uvm_config_db#(bit)::get(get_sequencer(), "", "simple_uart_parity_enable", parity_enable)) begin
             uvm_report_info("CONFIG","parity_enable set to default value(enabled)");
             parity_enable = 1;//default value
         end
