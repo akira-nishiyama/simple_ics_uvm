@@ -40,6 +40,11 @@ class ics_reactive_seq extends uvm_sequence #(simple_ics_seq_item);
             115200: bit_period = 8681;//8680.6 ns for 115200 bps.
             default: `uvm_fatal("CONFIG_ERR","Undefined baud rate.")
         endcase
+        //parity enable flag
+        if(!uvm_config_db#(bit)::get(this, "", "simple_uart_parity_enable", parity_enable)) begin
+            uvm_report_info("CONFIG","parity_enable set to default value(enabled)");
+            parity_enable = 1;//default value
+        end
         //number of stop bit
         if(!uvm_config_db#(int)::get(get_sequencer(), "", "simple_uart_stop_bit_num", stop_bit_num)) begin
             uvm_report_info("CONFIG","number of stop bit set to default value(1bit)");
@@ -49,7 +54,7 @@ class ics_reactive_seq extends uvm_sequence #(simple_ics_seq_item);
         forever begin
             react_req_fifo.get(received_item);
             uvm_report_info("REACT","get item");
-            #(bit_period*(0.2+stop_bit_num));
+            #(bit_period*(0.2+stop_bit_num+parity_enable));
             received_item.print();
             responce_item = new();
 
