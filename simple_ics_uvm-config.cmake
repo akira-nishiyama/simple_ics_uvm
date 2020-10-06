@@ -20,7 +20,7 @@ set(simple_ics_uvm_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/include")
 set(simple_ics_uvm_SRC_FILES "") #empty. this package is for simulation only.
 file(GLOB simple_ics_uvm_SIM_FILES ${CMAKE_CURRENT_LIST_DIR}/src/*.sv)
 list(APPEND simple_ics_uvm_SIM_FILES ${simple_uart_uvm_SIM_FILES})
-set(simple_ics_uvm_DEFINITIONS_VLOG "-i ${simple_ics_uvm_INCLUDE_DIRS} ${simple_uart_uvm_INCLUDE_DIRS}")
+set(simple_ics_uvm_DEFINITIONS_VLOG "-i ${simple_ics_uvm_INCLUDE_DIRS} ${simple_uart_uvm_DEFINITIONS_VLOG}")
 file(GLOB simple_ics_uvm_DEPENDENCIES   ${CMAKE_CURRENT_LIST_DIR}/include/*.svh
                                         ${CMAKE_CURRENT_LIST_DIR}/src/*.sv)
 list(APPEND simple_ics_uvm_DEPENDENCIES ${simple_uart_uvm_DEPENDENCIES})
